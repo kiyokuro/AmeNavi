@@ -2,10 +2,8 @@ package gr.jp.java_conf.kzstudio.amenavi.Activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -13,7 +11,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 
@@ -28,7 +29,7 @@ import java.io.File;
 
 import gr.jp.java_conf.kzstudio.amenavi.Fragment.TodaysWeatherFragment;
 import gr.jp.java_conf.kzstudio.amenavi.R;
-import gr.jp.java_conf.kzstudio.amenavi.API.Data;
+import gr.jp.java_conf.kzstudio.amenavi.Util.FileOutput;
 import gr.jp.java_conf.kzstudio.amenavi.Util.JsonWritter;
 
 public class MainActivity extends FragmentActivity {
@@ -38,14 +39,14 @@ public class MainActivity extends FragmentActivity {
     private String _provider;
     private double _lat = 0.00;
     private double _lon = 0.00;
-    private File _outputDir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         _context = this;
-        _outputDir = getDir("KokoTen", MODE_PRIVATE);
+        File outputDir = getDir("KokoTen", MODE_PRIVATE);
+        FileOutput._outputDir = outputDir;
 
         //GPSの準備と接続確認
         _locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -104,14 +105,7 @@ public class MainActivity extends FragmentActivity {
                         //位置情報の取得終了
                         _locationManager.removeUpdates(this);
 
-                        FragmentManager fm = getFragmentManager();
-                        FragmentTransaction ft = fm.beginTransaction();
-                        Fragment todayWeatherFm = new TodaysWeatherFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("outputDir", _outputDir.toString());
-                        todayWeatherFm.setArguments(bundle);
-                        ft.replace(R.id.container, todayWeatherFm);
-                        ft.commit();
+                        chageActivity();
 
                         //天気のデータを取得
                         /*Data data = new Data(_context);
@@ -159,14 +153,14 @@ public class MainActivity extends FragmentActivity {
                 //通信成功時の処理
                 Log.v("★ getdata", response.toString());
                 JsonWritter jsonWritter = new JsonWritter();
-                jsonWritter.fileMaker(response.toString(), "WeatherData", _outputDir);
+                jsonWritter.fileMaker(response.toString(), "WeatherData", FileOutput._outputDir);
 
-                FragmentManager fm = getFragmentManager();
+                FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 Fragment todayWeatherFm = new TodaysWeatherFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("outputDir", outputDir.toString());
-                todayWeatherFm.setArguments(bundle);
+                //Bundle bundle = new Bundle();
+                //bundle.putString("outputDir", outputDir.toString());
+                //todayWeatherFm.setArguments(bundle);
                 ft.replace(R.id.container, todayWeatherFm);
                 ft.commit();
             }
@@ -181,5 +175,11 @@ public class MainActivity extends FragmentActivity {
         }
         );
         _requestQueue.add(jsonObjReq);
+    }
+
+    private void chageActivity(){
+        Intent intent = new Intent(this,WatherActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

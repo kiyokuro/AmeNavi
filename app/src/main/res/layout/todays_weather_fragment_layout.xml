@@ -1,100 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:id="@+id/base_layout">
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--背景画像-->
+            <ImageView
+                android:id="@+id/today_weather"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!--背景画像に少し雲りを入れる-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#80FFFFFF"/>
+
+            <!--現在の天気-->
+            <TextView
+                android:id="@+id/current_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|right"
+                android:layout_marginTop="100dp"
+                android:text="晴れ！"
+                android:textSize="60dp"/>
+        </FrameLayout>
+
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FFFFFF"
-            android:id="@+id/base_layout">
+            android:orientation="vertical"
+            android:gravity="right|bottom">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+            <!--現在の天気を表すアイコン（現在は未実装）-->
+            <ImageView
+                android:id="@+id/current_weather_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <!--背景画像-->
-                    <ImageView
-                        android:id="@+id/today_weather"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <!--背景画像に少し雲りを入れる-->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#80FFFFFF"/>
-
-                    <!--現在の天気-->
-                    <TextView
-                        android:id="@+id/current_weather"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|right"
-                        android:layout_marginTop="100dp"
-                        android:text="晴れ！"
-                        android:textSize="60dp"/>
-                </FrameLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="right|bottom">
-
-                    <!--現在の天気を表すアイコン（現在は未実装）-->
-                    <ImageView
-                        android:id="@+id/current_weather_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"/>
-
-                    <!--cloud_cover-->
-                    <TextView
-                        android:id="@+id/cloud_cover"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="25dp"
-                        android:text="cloud_cover"
-                        android:textSize="25dp"/>
-                    <!--現在の気温-->
-                    <TextView
-                        android:id="@+id/temperature"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="25dp"
-                        android:layout_marginBottom="25dp"
-                        android:text="temperture"
-                        android:textSize="25dp"/>
-                </LinearLayout>
-            </FrameLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2">
-
-                <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/lsitview"/>
-            </LinearLayout>
-
+            <!--cloud_cover-->
+            <TextView
+                android:id="@+id/cloud_cover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="25dp"
+                android:text="cloud_cover"
+                android:textSize="25dp"/>
+            <!--現在の気温-->
+            <TextView
+                android:id="@+id/temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="25dp"
+                android:text="temperture"
+                android:textSize="25dp"/>
         </LinearLayout>
-    </ScrollView>
+    </FrameLayout>
 </LinearLayout>
+
 
