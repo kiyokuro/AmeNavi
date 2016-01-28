@@ -59,6 +59,7 @@ public class JsonParser{
                 elements.add(jsonArray.getJSONObject(i).getString("cloudcover"));
                 elements.add(jsonArray.getJSONObject(i).getJSONArray("lang_ja").getJSONObject(i).getString("value"));
                 elements.add(jsonArray.getJSONObject(i).getString("temp_C"));
+                elements.add(jsonArray.getJSONObject(i).getJSONArray("weatherIconUrl").getJSONObject(0).getString("value"));
 
                 //Log.v("jsonArray",elements.get(i));
             }

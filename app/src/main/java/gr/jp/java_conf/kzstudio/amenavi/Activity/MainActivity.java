@@ -11,12 +11,14 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,6 +35,7 @@ import gr.jp.java_conf.kzstudio.amenavi.Util.FileOutput;
 import gr.jp.java_conf.kzstudio.amenavi.Util.JsonWritter;
 
 public class MainActivity extends FragmentActivity {
+    private final int _REQUEST_PERMISSION = 10;
     private Context _context;
 
     private LocationManager _locationManager;
@@ -69,16 +72,23 @@ public class MainActivity extends FragmentActivity {
 
     @TargetApi(Build.VERSION_CODES.M)
     private void getLocation() {
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for Activity#requestPermissions for more details.
-            return;
-        }
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+
+        }/*else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, _REQUEST_PERMISSION);
+
+            } else {
+                Toast toast = Toast.makeText(this, "許可されないとアプリが実行できません", Toast.LENGTH_SHORT);
+                toast.show();
+
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, _REQUEST_PERMISSION);
+
+            }
+        }*/
+        
         //現在地取得開始
         _locationManager.requestLocationUpdates(
                 _provider, //LocationManager.NETWORK_PROVIDER,
@@ -111,7 +121,7 @@ public class MainActivity extends FragmentActivity {
                         /*Data data = new Data(_context);
                         String requestUrl = data.getAccessUrl(_lat, _lon);
 
-                        connectApi(requestUrl, _outputDir);
+                        connectApi(requestUrl);
                         */
                     }
 
@@ -135,9 +145,8 @@ public class MainActivity extends FragmentActivity {
     /**
      * APIからデータ取得して端末のファイルに書き出す
      * @param requestUrl APIにアクセスするURL
-     * @param outputDir ファイルの書き出し先パス
      */
-    private void connectApi(String requestUrl, final File outputDir){
+    private void connectApi(String requestUrl){
         RequestQueue _requestQueue = Volley.newRequestQueue(_context);
         JsonObjectRequest jsonObjReq =new JsonObjectRequest(
                 // HTTPメソッド名を設定する。GETかPOSTか等
