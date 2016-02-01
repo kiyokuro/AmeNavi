@@ -56,8 +56,12 @@ public class TodaysWeatherListFragment extends Fragment {
             JSONObject object = jsonReader.getJson("WeatherData", FileOutput._outputDir);
             for(int i=1;i<9;i++) {
                 futureWeatherData = jsonParser.getFutureWeather(object, i);
+                if(futureWeatherData.get(0)==null){
+                    break;
+                }
                 //ここにlistViewを作る処理を書く
                 list.add(new FutureWeather(
+                        futureWeatherData.get(7),
                         futureWeatherData.get(1),
                         futureWeatherData.get(5),
                         futureWeatherData.get(6),

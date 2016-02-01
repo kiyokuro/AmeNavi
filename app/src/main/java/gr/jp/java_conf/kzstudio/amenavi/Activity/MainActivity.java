@@ -29,13 +29,14 @@ import com.android.volley.toolbox.Volley;
 
 import java.io.File;
 
+import gr.jp.java_conf.kzstudio.amenavi.API.Data;
 import gr.jp.java_conf.kzstudio.amenavi.Fragment.TodaysWeatherFragment;
 import gr.jp.java_conf.kzstudio.amenavi.R;
 import gr.jp.java_conf.kzstudio.amenavi.Util.FileOutput;
 import gr.jp.java_conf.kzstudio.amenavi.Util.JsonWritter;
 
 public class MainActivity extends FragmentActivity {
-    private final int _REQUEST_PERMISSION = 10;
+    private final int _REQUEST_PERMISSION_GPS = 10;
     private Context _context;
 
     private LocationManager _locationManager;
@@ -50,7 +51,56 @@ public class MainActivity extends FragmentActivity {
         _context = this;
         File outputDir = getDir("KokoTen", MODE_PRIVATE);
         FileOutput._outputDir = outputDir;
+        findViewById(R.id.loadview).setVisibility(View.VISIBLE);
 
+        if(Build.VERSION.SDK_INT>=23){
+            checkPermission();
+        }else {
+            getLocation();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkPermission() {
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, _REQUEST_PERMISSION_GPS);
+
+            }else {
+                Toast toast = Toast.makeText(this, "現在地の天気を検索するために、GPSの使用を許可してください", Toast.LENGTH_LONG);
+                toast.show();
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, _REQUEST_PERMISSION_GPS);
+            }
+
+        } else {
+            getLocation();
+        }
+    }
+
+    // 結果の受け取り
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == _REQUEST_PERMISSION_GPS) {
+            // 使用が許可された
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLocation();
+                return;
+
+            } else {
+                // それでも拒否された時の対応
+                Toast toast = Toast.makeText(this, "アプリは実行できません", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void getLocation() {
         //GPSの準備と接続確認
         _locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         // Criteriaオブジェクトを生成
@@ -65,36 +115,13 @@ public class MainActivity extends FragmentActivity {
         boolean gpsFlg = _locationManager.isProviderEnabled(_provider);
         Log.d("GPS Enabled", gpsFlg ? "OK" : "NG");
 
-        findViewById(R.id.loadview).setVisibility(View.VISIBLE);
-
-        getLocation();
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private void getLocation() {
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
-
-        }/*else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, _REQUEST_PERMISSION);
-
-            } else {
-                Toast toast = Toast.makeText(this, "許可されないとアプリが実行できません", Toast.LENGTH_SHORT);
-                toast.show();
-
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, _REQUEST_PERMISSION);
-
-            }
-        }*/
-        
         //現在地取得開始
         _locationManager.requestLocationUpdates(
                 _provider, //LocationManager.NETWORK_PROVIDER,
                 5000, // 通知のための最小時間間隔（ミリ秒）
                 10, // 通知のための最小距離間隔（メートル）
                 new LocationListener() {
+                    @TargetApi(Build.VERSION_CODES.M)
                     @Override
                     public void onLocationChanged(Location location) {
                         _lat = location.getLatitude();
@@ -102,20 +129,13 @@ public class MainActivity extends FragmentActivity {
                         String msg = "Lat=" + _lat + "\nLng=" + _lon;
                         Log.v("現在地", msg);
 
-                        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for Activity#requestPermissions for more details.
+                        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             return;
                         }
                         //位置情報の取得終了
                         _locationManager.removeUpdates(this);
 
-                        chageActivity();
+                        changeActivity();
 
                         //天気のデータを取得
                         /*Data data = new Data(_context);
@@ -164,14 +184,16 @@ public class MainActivity extends FragmentActivity {
                 JsonWritter jsonWritter = new JsonWritter();
                 jsonWritter.fileMaker(response.toString(), "WeatherData", FileOutput._outputDir);
 
-                FragmentManager fm = getSupportFragmentManager();
+                /*FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 Fragment todayWeatherFm = new TodaysWeatherFragment();
                 //Bundle bundle = new Bundle();
                 //bundle.putString("outputDir", outputDir.toString());
                 //todayWeatherFm.setArguments(bundle);
                 ft.replace(R.id.container, todayWeatherFm);
-                ft.commit();
+                ft.commit();*/
+
+                changeActivity();
             }
         }
                 // 通信失敗時のリスナーを設定する
@@ -186,7 +208,8 @@ public class MainActivity extends FragmentActivity {
         _requestQueue.add(jsonObjReq);
     }
 
-    private void chageActivity(){
+    private void changeActivity(){
+        findViewById(R.id.loadview).setVisibility(View.GONE);
         Intent intent = new Intent(this,WatherActivity.class);
         startActivity(intent);
         finish();

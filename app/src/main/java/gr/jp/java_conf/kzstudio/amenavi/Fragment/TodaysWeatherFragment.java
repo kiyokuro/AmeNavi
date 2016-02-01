@@ -79,7 +79,10 @@ public class TodaysWeatherFragment extends Fragment implements View.OnClickListe
             _todayWeatherBg.setImageResource(R.drawable.sunny);
             _todayWeatherBg.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }*/
-        Log.v("showCurrentWeather", currentWeatherData.get(1));
+
+        if(currentWeatherData.get(0)==null){
+            _currentWeather.setText("No Data");
+        }
 
         //画面の情報をセットしていく
         _currentWeather.setText(currentWeatherData.get(1));

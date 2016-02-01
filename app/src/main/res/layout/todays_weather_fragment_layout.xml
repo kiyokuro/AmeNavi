@@ -10,12 +10,12 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <!--背景画像-->
+        <!--背景-->
         <View
             android:id="@+id/back_ground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#5588FF"/>
+            android:background="#FFFFFF"/>
 
         <LinearLayout
             android:layout_width="match_parent"
