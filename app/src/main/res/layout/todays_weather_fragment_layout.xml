@@ -1,100 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:id="@+id/base_layout">
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
+        android:layout_height="match_parent">
+        <!--背景-->
+        <View
+            android:id="@+id/back_ground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FFFFFF"
-            android:id="@+id/base_layout">
+            android:background="#FFFFFF"/>
 
-            <FrameLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_height="180dp">
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <!--背景画像-->
-                    <ImageView
-                        android:id="@+id/today_weather"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <!--背景画像に少し雲りを入れる-->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#80FFFFFF"/>
-
-                    <!--現在の天気-->
-                    <TextView
-                        android:id="@+id/current_weather"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|right"
-                        android:layout_marginTop="100dp"
-                        android:text="晴れ！"
-                        android:textSize="60dp"/>
-                </FrameLayout>
-
-
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="right|bottom">
+                    android:layout_weight="1">
 
-                    <!--現在の天気を表すアイコン（現在は未実装）-->
-                    <ImageView
-                        android:id="@+id/current_weather_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"/>
+                    <!--天気アイコン-->
+                    <com.android.volley.toolbox.NetworkImageView
+                        android:id="@+id/network_image_view"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="8dp"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
-                    <!--cloud_cover-->
-                    <TextView
-                        android:id="@+id/cloud_cover"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="25dp"
-                        android:text="cloud_cover"
-                        android:textSize="25dp"/>
                     <!--現在の気温-->
                     <TextView
                         android:id="@+id/temperature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="25dp"
-                        android:layout_marginBottom="25dp"
-                        android:text="temperture"
-                        android:textSize="25dp"/>
-                </LinearLayout>
-            </FrameLayout>
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="25"
+                        android:textSize="90dp"
+                        android:textColor="#EEE"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="℃"
+                        android:textSize="40dp"
+                        android:textColor="#EEE"
+                        android:layout_toRightOf="@+id/temperature"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="57dp"/>
+                </RelativeLayout>
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="2">
+                android:orientation="vertical">
 
-                <ListView
+                <!--現在の天気-->
+                <TextView
+                    android:id="@+id/current_weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:text="晴れ！"
+                    android:textSize="30dp"
+                    android:textColor="#EEE"/>
+
+                <!--cloud_cover-->
+                <TextView
+                    android:id="@+id/cloud_cover"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="雲量：20％"
+                    android:textSize="25dp"
+                    android:textColor="#EEE"/>
+
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/lsitview"/>
-            </LinearLayout>
+                    android:layout_marginTop="50dp">
 
+                    <!--日付year/month-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/year_month"
+                        android:textSize="25dp"
+                        android:text="2015/12"
+                        android:textColor="#EEE"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <!--日付day-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/day"
+                        android:textSize="90dp"
+                        android:text="23"
+                        android:textColor="#EEE"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="-100dp"
+                        android:layout_marginTop="15dp"/>
+
+                    <!--曜日-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/day_of_week"
+                        android:textSize="25dp"
+                        android:text="[金]"
+                        android:textColor="#EEE"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="125dp"/>
+                </FrameLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/under_arrow"
+                        android:gravity="center"
+                        android:text="scroll"
+                        android:textSize="20dp"
+                        android:textColor="#EEE"/>
+
+                    <TextView
+                        android:id="@+id/under_arrow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center"
+                        android:text="▽"
+                        android:textSize="20dp"
+                        android:textColor="#EEE"/>
+                </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </FrameLayout>
 </LinearLayout>
+
 

@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,7 +20,7 @@ import java.nio.channels.DatagramChannel;
  * 端末のファイルに保存されているJSONデータを読み込む
  */
 public class JsonReader {
-    public JSONObject getJson(String fileName, String outputDir) throws FileNotFoundException {
+    public JSONObject getJson(String fileName, File outputDir) throws FileNotFoundException {
 
         InputStream input;
         JSONObject jsonObject = null;

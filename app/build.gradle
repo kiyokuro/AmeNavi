@@ -25,4 +25,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile files('/Users/kiyokazu/AndroidStudioProjects/AmeNavi/libs/android-query-full.0.24.3.jar')
     compile 'eu.the4thfloor.volley:com.android.volley:2015.05.28'
+    compile files('/Users/kiyokazu/AndroidStudioProjects/AmeNavi/libs/android-directionalviewpager-1.2.1fixed.jar')
 }

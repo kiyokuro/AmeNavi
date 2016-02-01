@@ -54,11 +54,16 @@ public class JsonParser{
     public ArrayList<String> getCurrentWeather(JSONObject jsonObject) throws JSONException {
         ArrayList<String> elements = new ArrayList<String>();
         try{
+            if(jsonObject.getJSONObject(_DATA).getJSONArray("nearest_area")==null){
+                elements.add("null");
+                return elements;
+            }
             JSONArray jsonArray = jsonObject.getJSONObject(_DATA).getJSONArray(_CURRENTCONDITION);//dataをarrayにする
             for(int i = 0; i < jsonArray.length(); i++){
                 elements.add(jsonArray.getJSONObject(i).getString("cloudcover"));
                 elements.add(jsonArray.getJSONObject(i).getJSONArray("lang_ja").getJSONObject(i).getString("value"));
                 elements.add(jsonArray.getJSONObject(i).getString("temp_C"));
+                elements.add(jsonArray.getJSONObject(i).getJSONArray("weatherIconUrl").getJSONObject(0).getString("value"));
 
                 //Log.v("jsonArray",elements.get(i));
             }
@@ -85,6 +90,7 @@ public class JsonParser{
             elements.add(jsonArray.getJSONObject(allayNumber).getString("time"));
             elements.add(jsonArray.getJSONObject(allayNumber).getString("chanceofrain"));
             elements.add(jsonArray.getJSONObject(allayNumber).getString("chanceofsnow"));
+            elements.add(jsonArray.getJSONObject(allayNumber).getJSONArray("weatherIconUrl").getJSONObject(0).getString("value"));
 
             Log.v("jsonArray", elements.toString());
 

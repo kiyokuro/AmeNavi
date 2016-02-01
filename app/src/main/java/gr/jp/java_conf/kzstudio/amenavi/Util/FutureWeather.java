@@ -6,7 +6,7 @@ import android.net.Uri;
  * Created by kiyokazu on 16/01/25.
  */
 public class FutureWeather {
-    private Uri _imgUrl;
+    private String _imgUrl;
     private String _weather;
     private String _rain;//降水確率、数字％
     private String _snow;//降雪確率、数字％
@@ -14,7 +14,8 @@ public class FutureWeather {
     private String _cloudCover;
     private String _time;
 
-    public FutureWeather(String weather, String rain, String snow, String temperture, String cloudCover, String time){
+    public FutureWeather(String imgUrl, String weather, String rain, String snow, String temperture, String cloudCover, String time){
+        this._imgUrl = imgUrl;
         this._weather = weather;
         this._rain = rain;
         this._snow = snow;
@@ -23,11 +24,11 @@ public class FutureWeather {
         this._time = time;
     }
 
-    public Uri get_imgUrl(){
+    public String get_imgUrl(){
         return _imgUrl;
     }
 
-    public void set_imgUrl(Uri imgUrl){
+    public void set_imgUrl(String imgUrl){
         this._imgUrl = imgUrl;
     }
 
