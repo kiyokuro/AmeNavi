@@ -16,84 +16,97 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="70dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp">
 
-                <LinearLayout
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="10dp">
+                <!--フレームレイアウト入れないと下の2つのviewの間に微妙に隙間ができて変-->
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-                    <!--フレームレイアウト入れないと下の2つのviewの間に微妙に隙間ができて変-->
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                    <!--AM,PMを入れる-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ampm"
+                        android:textColor="#EEE"
+                        android:layout_marginTop="6dp"/>
 
-                        <!--AM,PMを入れる-->
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/ampm"
-                            android:textColor="#EEE"/>
-
-                        <!--時間を入れる-->
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/time"
-                            android:textSize="40dp"
-                            android:textColor="#EEE"
-                            android:layout_marginTop="10dp"/>
-                    </FrameLayout>
-                </LinearLayout>
-
-                <!--天気アイコン-->
-                <com.android.volley.toolbox.NetworkImageView
-                    android:id="@+id/list_network_image"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="8dp"/>
+                    <!--時間を入れる-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/time"
+                        android:textSize="40dp"
+                        android:textColor="#EEE"
+                        android:layout_marginTop="14dp"/>
+                </FrameLayout>
             </LinearLayout>
+
+            <!--天気アイコン-->
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/list_network_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="5dp"/>
+
+            <!--フレームレイアウト入れないと下の2つのviewの間に微妙に隙間ができて変-->
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp">
+
+                <!--℃を入れる-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c_mark"
+                    android:text="℃"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="28dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#EEE"/>
+
+                <!--気温を入れる-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/temp"
+                    android:textSize="50dp"
+                    android:textColor="#EEE"/>
+            </FrameLayout>
+
 
             <!--縦に割る-->
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center_vertical">
 
                 <!--天気を入れる-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/weather"
+                    android:textSize="20dp"
+                    android:textColor="#EEE"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/weather"
-                        android:textSize="25dp"
-                        android:textColor="#EEE"/>
-
-                </LinearLayout>
-
-                <!--気温を入れる-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/temp"
-                        android:textSize="25dp"
-                        android:textColor="#EEE"/>
-                </LinearLayout>
+                <!--降水確率-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/rain_cance_list"
+                    android:textSize="20dp"
+                    android:textColor="#EEE"/>
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>

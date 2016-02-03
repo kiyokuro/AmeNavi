@@ -49,7 +49,7 @@ public class Data extends Volley{
         requestURL.append(_URL);
         requestURL.append("q=" + area);
         requestURL.append("&format=json");
-        requestURL.append("&num_of_days=1");
+        requestURL.append("&num_of_days=2");
         requestURL.append("&fx24=yes");
         requestURL.append("&includelocation=yes");
         requestURL.append("&lang=ja");

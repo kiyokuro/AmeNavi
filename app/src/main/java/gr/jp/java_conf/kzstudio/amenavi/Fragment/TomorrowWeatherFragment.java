@@ -25,13 +25,13 @@ import gr.jp.java_conf.kzstudio.amenavi.Util.ListAdapter;
 import gr.jp.java_conf.kzstudio.amenavi.Util.MyDate;
 
 /**
- * Created by kiyokazu on 16/01/27.
+ * Created by kiyokazu on 16/02/03.
  */
-public class TodaysWeatherListFragment extends Fragment {
+public class TomorrowWeatherFragment extends Fragment {
     private ListView _listVIew;
     private TextView _dayLabel;
 
-    private ArrayList<String> futureWeatherData;
+    private ArrayList<String> tomorrowWeatherData;
     private ArrayList<FutureWeather> list;
 
     @Override
@@ -40,44 +40,44 @@ public class TodaysWeatherListFragment extends Fragment {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.todays_weather_list_fragment_layout, null);//layoutを返す
-        _listVIew = (ListView)view.findViewById(R.id.lsitview);
+        View view = inflater.inflate(R.layout.tomorrow_weather_list_layout, null);//layoutを返す
+        _listVIew = (ListView)view.findViewById(R.id.tomorrow_list);
         _dayLabel = (TextView)view.findViewById(R.id.day_label);
 
         list = new ArrayList<FutureWeather>();
 
-        showFutureWeather();
+        showTomorrowWeather();
         return view;
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    public void showFutureWeather(){
+    public void showTomorrowWeather(){
         JsonReader jsonReader = new JsonReader();
         JsonParser jsonParser = new JsonParser();
-        futureWeatherData = new ArrayList<String>();
+        tomorrowWeatherData = new ArrayList<String>();
         ListAdapter adapter;
         try {
             JSONObject object = jsonReader.getJson("WeatherData", FileOutput._outputDir);
             for(int i=1;i<9;i++) {
-                futureWeatherData = jsonParser.getFutureWeather(object, i);
-                if(futureWeatherData.get(0)==null){
+                tomorrowWeatherData = jsonParser.getTomorrowWeather(object, i);
+                if(tomorrowWeatherData.get(0)==null){
                     break;
                 }
                 //ここにlistViewを作る処理を書く
                 list.add(new FutureWeather(
-                        futureWeatherData.get(7),
-                        futureWeatherData.get(1),
-                        futureWeatherData.get(5),
-                        futureWeatherData.get(6),
-                        futureWeatherData.get(2),
-                        futureWeatherData.get(0),
-                        futureWeatherData.get(4)));
+                        tomorrowWeatherData.get(7),
+                        tomorrowWeatherData.get(1),
+                        tomorrowWeatherData.get(5),
+                        tomorrowWeatherData.get(6),
+                        tomorrowWeatherData.get(2),
+                        tomorrowWeatherData.get(0),
+                        tomorrowWeatherData.get(4)));
             }
             adapter = new ListAdapter(getActivity().getApplicationContext(), R.layout.future_weather_list, list);
             _listVIew.setAdapter(adapter);
 
             MyDate myDate = new MyDate();
-            _dayLabel.setText(myDate.getDate()[1]+"/"+myDate.getDate()[2]+"["+myDate.getDate()[3]+"]");
+            _dayLabel.setText(myDate.getTomorrowDate()[1]+"/"+myDate.getTomorrowDate()[2]+"["+myDate.getTomorrowDate()[3]+"]");
         }catch (JSONException | IOException e){
             e.printStackTrace();
         }

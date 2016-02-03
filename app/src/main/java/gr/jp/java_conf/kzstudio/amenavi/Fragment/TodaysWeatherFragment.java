@@ -33,6 +33,7 @@ import gr.jp.java_conf.kzstudio.amenavi.Util.MyDate;
 public class TodaysWeatherFragment extends Fragment implements View.OnClickListener{
     private TextView _currentWeather;
     private TextView _cloudCover;
+    private TextView _rainChance;
     private TextView _temperature;
     private View _backGround;
     private NetworkImageView _networkImageView;
@@ -53,7 +54,8 @@ public class TodaysWeatherFragment extends Fragment implements View.OnClickListe
         View view = inflater.inflate(R.layout.todays_weather_fragment_layout,null);//layoutを返す
         _backGround = view.findViewById(R.id.back_ground);
         _currentWeather = (TextView)view.findViewById(R.id.current_weather);
-        _cloudCover = (TextView)view.findViewById(R.id.cloud_cover);
+        //_cloudCover = (TextView)view.findViewById(R.id.cloud_cover);
+        _rainChance = (TextView)view.findViewById(R.id.rain_chance);
         _temperature = (TextView)view.findViewById(R.id.temperature);
         _yearMonth = (TextView)view.findViewById(R.id.year_month);
         _day = (TextView)view.findViewById(R.id.day);
@@ -69,8 +71,9 @@ public class TodaysWeatherFragment extends Fragment implements View.OnClickListe
     public void showCurrentWeather(){
         JsonReader jsonReader = new JsonReader();
         JsonParser jsonParser = new JsonParser();
+        JSONObject object = null;
         try {
-            JSONObject object = jsonReader.getJson("WeatherData", FileOutput._outputDir);
+            object = jsonReader.getJson("WeatherData", FileOutput._outputDir);
             currentWeatherData = jsonParser.getCurrentWeather(object);
         }catch (JSONException | IOException e){
             e.printStackTrace();
@@ -86,13 +89,14 @@ public class TodaysWeatherFragment extends Fragment implements View.OnClickListe
 
         //画面の情報をセットしていく
         _currentWeather.setText(currentWeatherData.get(1));
-        _cloudCover.setText("雲量 : "+currentWeatherData.get(0)+"%");
+        //_cloudCover.setText("雲量 : "+currentWeatherData.get(0)+"%");
         _temperature.setText(currentWeatherData.get(2));
         _url = currentWeatherData.get(3);
         MyDate date = new MyDate();
         _yearMonth.setText(date.getDate()[0]+"/"+date.getDate()[1]);
         _day.setText(date.getDate()[2]);
         _dayOfWeek.setText("["+date.getDate()[3]+"]");
+        _rainChance.setText("降水確率 : " + jsonParser.getRainChance(object,Integer.parseInt(date.getDate()[4])) + "%");
 
         _networkImageView.setImageUrl(_url, new ImageLoader(_queue, new ImageLoader.ImageCache() {
             @Override

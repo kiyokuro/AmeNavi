@@ -141,8 +141,7 @@ public class MainActivity extends FragmentActivity {
                         /*Data data = new Data(_context);
                         String requestUrl = data.getAccessUrl(_lat, _lon);
 
-                        connectApi(requestUrl);
-                        */
+                        connectApi(requestUrl);*/
                     }
 
                     @Override

@@ -51,6 +51,7 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
         TextView ampm = (TextView)view.findViewById(R.id.ampm);
         TextView time = (TextView)view.findViewById(R.id.time);
         TextView temp = (TextView)view.findViewById(R.id.temp);
+        TextView rainChance = (TextView)view.findViewById(R.id.rain_cance_list);
         final View listBackground = view.findViewById(R.id.listview_background);
 
         //天気のテキストをセット
@@ -110,7 +111,10 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
         }
 
         //気温をセット
-        temp.setText(item.get_temperture()+"℃");
+        temp.setText(item.get_temperture());
+
+        //降水確率をセット
+        rainChance.setText("降水確率 : "+item.get_rain()+"%");
 
         return view;
     }

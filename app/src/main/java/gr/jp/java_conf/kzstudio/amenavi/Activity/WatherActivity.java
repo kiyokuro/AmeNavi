@@ -12,6 +12,7 @@ import java.util.List;
 
 import gr.jp.java_conf.kzstudio.amenavi.Fragment.TodaysWeatherFragment;
 import gr.jp.java_conf.kzstudio.amenavi.Fragment.TodaysWeatherListFragment;
+import gr.jp.java_conf.kzstudio.amenavi.Fragment.WeatherPagerFragment;
 import gr.jp.java_conf.kzstudio.amenavi.R;
 
 /**
@@ -33,7 +34,7 @@ public class WatherActivity extends FragmentActivity {
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
 
-            fragments = Arrays.asList(new TodaysWeatherFragment(), new TodaysWeatherListFragment());
+            fragments = Arrays.asList(new TodaysWeatherFragment(), new WeatherPagerFragment());
         }
 
         @Override

@@ -89,12 +89,22 @@
                     android:textColor="#EEE"/>
 
                 <!--cloud_cover-->
-                <TextView
+                <!--TextView
                     android:id="@+id/cloud_cover"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="雲量：20％"
+                    android:text="雲量 : 20％"
+                    android:textSize="25dp"
+                    android:textColor="#EEE"/-->
+
+                <!--降水確率-->
+                <TextView
+                    android:id="@+id/rain_chance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="降水確率 : 20％"
                     android:textSize="25dp"
                     android:textColor="#EEE"/>
 
