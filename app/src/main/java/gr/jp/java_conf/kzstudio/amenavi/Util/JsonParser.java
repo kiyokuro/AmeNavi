@@ -92,7 +92,7 @@ public class JsonParser{
             elements.add(jsonArray.getJSONObject(allayNumber).getString("chanceofsnow"));
             elements.add(jsonArray.getJSONObject(allayNumber).getJSONArray("weatherIconUrl").getJSONObject(0).getString("value"));
 
-            Log.v("jsonArray", elements.toString());
+            //Log.v("jsonArray", elements.toString());
 
         }catch (JSONException e){
             e.printStackTrace();
@@ -129,7 +129,7 @@ public class JsonParser{
             elements.add(jsonArray.getJSONObject(allayNumber).getString("chanceofsnow"));
             elements.add(jsonArray.getJSONObject(allayNumber).getJSONArray("weatherIconUrl").getJSONObject(0).getString("value"));
 
-            Log.v("jsonArray", elements.toString());
+            //Log.v("jsonArray", elements.toString());
 
         }catch (JSONException e){
             e.printStackTrace();
