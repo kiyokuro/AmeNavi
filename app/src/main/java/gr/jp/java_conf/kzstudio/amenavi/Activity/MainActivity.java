@@ -12,10 +12,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -30,7 +27,6 @@ import com.android.volley.toolbox.Volley;
 import java.io.File;
 
 import gr.jp.java_conf.kzstudio.amenavi.API.Data;
-import gr.jp.java_conf.kzstudio.amenavi.Fragment.TodaysWeatherFragment;
 import gr.jp.java_conf.kzstudio.amenavi.R;
 import gr.jp.java_conf.kzstudio.amenavi.Util.FileOutput;
 import gr.jp.java_conf.kzstudio.amenavi.Util.JsonWritter;
@@ -135,13 +131,13 @@ public class MainActivity extends FragmentActivity {
                         //位置情報の取得終了
                         _locationManager.removeUpdates(this);
 
-                        changeActivity();
+                        //changeActivity();
 
                         //天気のデータを取得
-                        /*Data data = new Data(_context);
+                        Data data = new Data(_context);
                         String requestUrl = data.getAccessUrl(_lat, _lon);
 
-                        connectApi(requestUrl);*/
+                        connectApi(requestUrl);
                     }
 
                     @Override
@@ -179,7 +175,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onResponse(Object response) {
                 //通信成功時の処理
-                Log.v("★ getdata", response.toString());
+                //Log.v("★ getdata", response.toString());
                 JsonWritter jsonWritter = new JsonWritter();
                 jsonWritter.fileMaker(response.toString(), "WeatherData", FileOutput._outputDir);
 

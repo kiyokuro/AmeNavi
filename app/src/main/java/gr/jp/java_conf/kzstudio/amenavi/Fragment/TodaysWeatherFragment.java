@@ -78,12 +78,9 @@ public class TodaysWeatherFragment extends Fragment implements View.OnClickListe
         }catch (JSONException | IOException e){
             e.printStackTrace();
         }
-        /*if(currentWeatherData.get(1).equals("所により曇り")){
-            _todayWeatherBg.setImageResource(R.drawable.sunny);
-            _todayWeatherBg.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        }*/
 
         if(currentWeatherData.get(0)==null){
+            _currentWeather.setTextColor(000);
             _currentWeather.setText("No Data");
         }
 

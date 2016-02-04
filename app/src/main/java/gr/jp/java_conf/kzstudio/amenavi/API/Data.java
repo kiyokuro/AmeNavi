@@ -55,28 +55,6 @@ public class Data extends Volley{
         requestURL.append("&lang=ja");
         requestURL.append("&key="+ _apiKey);
         Log.v("requestURL",requestURL.toString());
-        
-        /*params.put("q", area);//現在の座標を入れる
-        params.put("format", "json");//取得データの形式
-        params.put("num_of_days","1");//取得日数は当日分だけ
-        params.put("fx24","yes");//時刻は24時間表記
-        params.put("includelocation","yes");//データの取得エリアを取得する
-        params.put("lang","ja");//日本語で取得
-        params.put("key", _apiKey);
-        aq.ajax(_URL, params, String.class, new AjaxCallback<String>() {
-            @Override
-            public void callback(String url, String result, AjaxStatus status) {
-                Log.v("postmessege★", url + "q=" + area + "&format=json"
-                        + "&num_of_days=1" + "&fx24=yes" + "&includelocation=yes"
-                        + "&lang=ja" + "&key=" + _apiKey);
-
-                // get response from API
-                Log.v("★ getdata", result);
-                JsonWritter jsonWritter = new JsonWritter();
-                jsonWritter.fileMaker(result, "WeatherData");
-
-            }
-        });*/
 
         return requestURL.toString();
     }

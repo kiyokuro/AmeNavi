@@ -2,10 +2,13 @@ package gr.jp.java_conf.kzstudio.amenavi.Util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -26,6 +29,8 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
     private LayoutInflater _inflater;
     private Context _context;
     RequestQueue queue;
+    private ImageLoader imageLoader;
+    private LruCache<String, Bitmap> mCache;
 
     public ListAdapter(Context context, int resourceId, List<FutureWeather> item) {
         super(context, resourceId, item);
@@ -33,6 +38,8 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
         this._item = item;
         this._resourceId = resourceId;
         this._inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        queue = Volley.newRequestQueue(getContext());
+        imageLoader = new ImageLoader(queue, new BitmapCache());
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -48,6 +55,7 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
         FutureWeather item = this._item.get(position);
         TextView weather = (TextView)view.findViewById(R.id.weather);
         NetworkImageView image = (NetworkImageView)view.findViewById(R.id.list_network_image);
+        //ImageView imageView = (ImageView)view.findViewById(R.id.image_view);
         TextView ampm = (TextView)view.findViewById(R.id.ampm);
         TextView time = (TextView)view.findViewById(R.id.time);
         TextView temp = (TextView)view.findViewById(R.id.temp);
@@ -66,6 +74,7 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
             public Bitmap getBitmap(String url) {
                 return null;
             }
+
             @Override
             public void putBitmap(String url, Bitmap bitmap) {
                 //Bitmap bitmap = ((BitmapDrawable) _networkImageView.getDrawable()).getBitmap();
@@ -73,6 +82,12 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
                 listBackground.setBackgroundColor(pixecColor);
             }
         }));
+
+        // 画像取得処理
+        //ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
+        //imageLoader.get(url, listener);
+
+
 
         //時間をセット
         switch (item.get_time()){
@@ -107,6 +122,10 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
             case "2100":
                 ampm.setText("PM");
                 time.setText("9");
+                break;
+            default:
+                ampm.setText("??");
+                time.setText("?");
                 break;
         }
 

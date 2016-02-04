@@ -54,23 +54,18 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="5dp"/>
+            <!--ImageView
+                android:id="@+id/image_view"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="5dp"/-->
 
             <!--フレームレイアウト入れないと下の2つのviewの間に微妙に隙間ができて変-->
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp">
-
-                <!--℃を入れる-->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/c_mark"
-                    android:text="℃"
-                    android:textSize="20dp"
-                    android:layout_marginLeft="28dp"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#EEE"/>
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:orientation="horizontal">
 
                 <!--気温を入れる-->
                 <TextView
@@ -79,7 +74,16 @@
                     android:id="@+id/temp"
                     android:textSize="50dp"
                     android:textColor="#EEE"/>
-            </FrameLayout>
+                <!--℃を入れる-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/c_mark"
+                    android:text="℃"
+                    android:textSize="20dp"
+                    android:textColor="#EEE"
+                    android:layout_marginTop="12dp"/>
+            </LinearLayout>
 
 
             <!--縦に割る-->
