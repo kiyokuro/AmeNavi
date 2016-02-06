@@ -92,7 +92,44 @@ public class JsonParser{
             elements.add(jsonArray.getJSONObject(allayNumber).getString("chanceofsnow"));
             elements.add(jsonArray.getJSONObject(allayNumber).getJSONArray("weatherIconUrl").getJSONObject(0).getString("value"));
 
-            Log.v("jsonArray", elements.toString());
+            //Log.v("jsonArray", elements.toString());
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return elements;
+    }
+
+    public String getRainChance(JSONObject jsonObject, int time){
+        String rainChance = "";
+        int arrayNum = 0;
+        arrayNum = time / 3 + 1;
+        try {
+            rainChance = jsonObject.getJSONObject(_DATA).
+                    getJSONArray(_WEATHER).getJSONObject(0).
+                    getJSONArray(_HOURLY).getJSONObject(arrayNum).
+                    getString("chanceofrain");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return rainChance;
+    }
+
+    public ArrayList<String> getTomorrowWeather(JSONObject jsonObject, int allayNumber) throws JSONException{
+        ArrayList<String> elements = new ArrayList<String>();
+        try{
+            JSONArray jsonArray = jsonObject.getJSONObject(_DATA).getJSONArray(_WEATHER).getJSONObject(1).getJSONArray(_HOURLY);//dataをarrayにする
+
+            elements.add(jsonArray.getJSONObject(allayNumber).getString("cloudcover"));
+            elements.add(jsonArray.getJSONObject(allayNumber).getJSONArray("lang_ja").getJSONObject(0).getString("value"));
+            elements.add(jsonArray.getJSONObject(allayNumber).getString("tempC"));
+            elements.add(jsonArray.getJSONObject(allayNumber).getJSONArray("weatherIconUrl").getJSONObject(0).getString("value"));
+            elements.add(jsonArray.getJSONObject(allayNumber).getString("time"));
+            elements.add(jsonArray.getJSONObject(allayNumber).getString("chanceofrain"));
+            elements.add(jsonArray.getJSONObject(allayNumber).getString("chanceofsnow"));
+            elements.add(jsonArray.getJSONObject(allayNumber).getJSONArray("weatherIconUrl").getJSONObject(0).getString("value"));
+
+            //Log.v("jsonArray", elements.toString());
 
         }catch (JSONException e){
             e.printStackTrace();
