@@ -12,7 +12,8 @@ public class MyDate {
         String[] dayInfo = new String[5];//year,month,day,day_of_week
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
+        TimeZone timeZone = TimeZone.getDefault();
+        calendar.setTimeZone(TimeZone.getTimeZone(String.valueOf(timeZone)));
         dayInfo[0] = String.valueOf(calendar.get(calendar.YEAR));
         dayInfo[1] = String.valueOf(calendar.get(calendar.MONTH)+1);
         dayInfo[2] = String.valueOf(calendar.get(calendar.DATE));

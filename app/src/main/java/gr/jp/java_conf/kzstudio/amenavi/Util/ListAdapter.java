@@ -67,7 +67,6 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
 
         //アイコンをセット
         String url = item.get_imgUrl();
-        queue = Volley.newRequestQueue(_context);
 
         image.setImageUrl(url, new ImageLoader(queue, new ImageLoader.ImageCache() {
             @Override

@@ -58,11 +58,16 @@ public class TodaysWeatherListFragment extends Fragment {
         ListAdapter adapter;
         try {
             JSONObject object = jsonReader.getJson("WeatherData", FileOutput._outputDir);
+            futureWeatherData = jsonParser.getFutureWeather(object, 0);
+            if(futureWeatherData.size()==0){
+                list.add(new FutureWeather("","No Data","","","","",""));
+                adapter = new ListAdapter(getActivity().getApplicationContext(), R.layout.future_weather_list, list);
+                _listVIew.setAdapter(adapter);
+                return;
+            }
             for(int i=1;i<9;i++) {
                 futureWeatherData = jsonParser.getFutureWeather(object, i);
-                if(futureWeatherData.get(0)==null){
-                    break;
-                }
+
                 //ここにlistViewを作る処理を書く
                 list.add(new FutureWeather(
                         futureWeatherData.get(7),

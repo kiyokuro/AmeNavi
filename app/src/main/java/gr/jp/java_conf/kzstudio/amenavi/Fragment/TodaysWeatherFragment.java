@@ -79,9 +79,10 @@ public class TodaysWeatherFragment extends Fragment implements View.OnClickListe
             e.printStackTrace();
         }
 
-        if(currentWeatherData.get(0)==null){
+        if(currentWeatherData.size()==0){
             _currentWeather.setTextColor(000);
             _currentWeather.setText("No Data");
+            return;
         }
 
         //画面の情報をセットしていく
