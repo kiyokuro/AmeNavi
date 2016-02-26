@@ -1,9 +1,7 @@
 package gr.jp.java_conf.kzstudio.amenavi.Util;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
-import android.view.LayoutInflater;
 
 import com.android.volley.toolbox.ImageLoader;
 

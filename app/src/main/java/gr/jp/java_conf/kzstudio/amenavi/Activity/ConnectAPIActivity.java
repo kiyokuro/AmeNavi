@@ -3,7 +3,6 @@ package gr.jp.java_conf.kzstudio.amenavi.Activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,7 +34,8 @@ public class ConnectAPIActivity extends Activity {
 
         Intent intent = getIntent();
         Data data = new Data(_context);
-        String requestCode = data.getAccessUrl(intent.getDoubleExtra("lat",35.681382),intent.getDoubleExtra("lon",139.766084));
+        String requestCode = data.getAccessUrl(intent.getDoubleExtra("lat",35.681382),
+                intent.getDoubleExtra("lon",139.766084));
         connectApi(requestCode);
     }
 

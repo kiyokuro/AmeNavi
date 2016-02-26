@@ -36,6 +36,7 @@ public class TodaysWeatherPagerFragment extends Fragment {
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
+            //横向きに並べるフラグメントを指定する
             fragments = Arrays.asList(new TodaysWeatherFragment(), new SettingFragment());
         }
 

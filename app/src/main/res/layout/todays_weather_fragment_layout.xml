@@ -57,14 +57,14 @@
                         android:layout_marginBottom="10dp"
                         android:text="25"
                         android:textSize="90dp"
-                        android:textColor="#EEE"/>
+                        android:textColor="#FFF"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="℃"
                         android:textSize="40dp"
-                        android:textColor="#EEE"
+                        android:textColor="#FFF"
                         android:layout_toRightOf="@+id/temperature"
                         android:layout_alignParentBottom="true"
                         android:layout_marginBottom="57dp"/>
@@ -86,7 +86,7 @@
                     android:layout_marginTop="10dp"
                     android:text="晴れ！"
                     android:textSize="30dp"
-                    android:textColor="#EEE"/>
+                    android:textColor="#FFF"/>
 
                 <!--cloud_cover-->
                 <!--TextView
@@ -106,7 +106,7 @@
                     android:layout_gravity="center_horizontal"
                     android:text="降水確率 : 20％"
                     android:textSize="25dp"
-                    android:textColor="#EEE"/>
+                    android:textColor="#FFF"/>
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -120,7 +120,7 @@
                         android:id="@+id/year_month"
                         android:textSize="25dp"
                         android:text="2015/12"
-                        android:textColor="#EEE"
+                        android:textColor="#FFF"
                         android:layout_gravity="center_horizontal"/>
 
                     <!--日付day-->
@@ -130,7 +130,7 @@
                         android:id="@+id/day"
                         android:textSize="90dp"
                         android:text="23"
-                        android:textColor="#EEE"
+                        android:textColor="#FFF"
                         android:layout_gravity="center_horizontal"
                         android:padding="-100dp"
                         android:layout_marginTop="15dp"/>
@@ -142,7 +142,7 @@
                         android:id="@+id/day_of_week"
                         android:textSize="25dp"
                         android:text="[金]"
-                        android:textColor="#EEE"
+                        android:textColor="#FFF"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="125dp"/>
                 </FrameLayout>
@@ -159,7 +159,7 @@
                         android:gravity="center"
                         android:text="scroll"
                         android:textSize="20dp"
-                        android:textColor="#EEE"/>
+                        android:textColor="#FFF"/>
 
                     <TextView
                         android:id="@+id/under_arrow"
@@ -169,7 +169,7 @@
                         android:gravity="center"
                         android:text="▽"
                         android:textSize="20dp"
-                        android:textColor="#EEE"/>
+                        android:textColor="#FFF"/>
 
                 </RelativeLayout>
             </LinearLayout>

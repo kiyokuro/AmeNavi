@@ -2,13 +2,12 @@ package gr.jp.java_conf.kzstudio.amenavi.Util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Color;
 import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -49,13 +48,11 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
             view = convertView;
         } else {
             view = this._inflater.inflate(this._resourceId, null);
-            //view = _inflater.inflate(_resourceId,parent,false);
         }
 
         FutureWeather item = this._item.get(position);
         TextView weather = (TextView)view.findViewById(R.id.weather);
         NetworkImageView image = (NetworkImageView)view.findViewById(R.id.list_network_image);
-        //ImageView imageView = (ImageView)view.findViewById(R.id.image_view);
         TextView ampm = (TextView)view.findViewById(R.id.ampm);
         TextView time = (TextView)view.findViewById(R.id.time);
         TextView temp = (TextView)view.findViewById(R.id.temp);
@@ -63,11 +60,15 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
         final View listBackground = view.findViewById(R.id.listview_background);
 
         //天気のテキストをセット
-        weather.setText(item.get_weather());
+        if(item.get_weather().equals("No Data")){
+            weather.setTextColor(Color.parseColor("#000000"));
+            weather.setText(item.get_weather());
+        }else {
+            weather.setText(item.get_weather());
+        }
 
         //アイコンをセット
         String url = item.get_imgUrl();
-
         image.setImageUrl(url, new ImageLoader(queue, new ImageLoader.ImageCache() {
             @Override
             public Bitmap getBitmap(String url) {

@@ -1,9 +1,9 @@
 package gr.jp.java_conf.kzstudio.amenavi.Fragment;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +30,8 @@ import gr.jp.java_conf.kzstudio.amenavi.Util.MyDate;
 /**
  * Created by kiyokazu on 16/01/09.
  */
-public class TodaysWeatherFragment extends Fragment implements View.OnClickListener{
+public class TodaysWeatherFragment extends Fragment{
     private TextView _currentWeather;
-    private TextView _cloudCover;
     private TextView _rainChance;
     private TextView _temperature;
     private View _backGround;
@@ -42,8 +41,7 @@ public class TodaysWeatherFragment extends Fragment implements View.OnClickListe
     private TextView _dayOfWeek;
 
     private ArrayList<String> currentWeatherData;
-    private String _url;
-    RequestQueue _queue;
+    private RequestQueue _queue;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -54,7 +52,6 @@ public class TodaysWeatherFragment extends Fragment implements View.OnClickListe
         View view = inflater.inflate(R.layout.todays_weather_fragment_layout,null);//layoutを返す
         _backGround = view.findViewById(R.id.back_ground);
         _currentWeather = (TextView)view.findViewById(R.id.current_weather);
-        //_cloudCover = (TextView)view.findViewById(R.id.cloud_cover);
         _rainChance = (TextView)view.findViewById(R.id.rain_chance);
         _temperature = (TextView)view.findViewById(R.id.temperature);
         _yearMonth = (TextView)view.findViewById(R.id.year_month);
@@ -69,52 +66,53 @@ public class TodaysWeatherFragment extends Fragment implements View.OnClickListe
     }
 
     public void showCurrentWeather(){
+        MyDate date = new MyDate();
         JsonReader jsonReader = new JsonReader();
         JsonParser jsonParser = new JsonParser();
-        JSONObject object = null;
+        JSONObject jsonObject = null;
         try {
-            object = jsonReader.getJson("WeatherData", FileOutput._outputDir);
-            currentWeatherData = jsonParser.getCurrentWeather(object);
+            jsonObject = jsonReader.getJson("WeatherData", FileOutput._outputDir);
+            currentWeatherData = jsonParser.getCurrentWeather(jsonObject);
         }catch (JSONException | IOException e){
             e.printStackTrace();
         }
 
+        //通信には成功しても、天気の情報がない場所だとデータ取れない
         if(currentWeatherData.size()==0){
-            _currentWeather.setTextColor(000);
+            _currentWeather.setTextColor(Color.parseColor("#000000"));
             _currentWeather.setText("No Data");
+            _rainChance.setTextColor(Color.parseColor("#000000"));
+            _rainChance.setText("右にスクロールして再取得");
             return;
         }
 
-        //画面の情報をセットしていく
+        //画面に情報をセットしていく
+        //天気
         _currentWeather.setText(currentWeatherData.get(1));
-        //_cloudCover.setText("雲量 : "+currentWeatherData.get(0)+"%");
+        //気温
         _temperature.setText(currentWeatherData.get(2));
-        _url = currentWeatherData.get(3);
-        MyDate date = new MyDate();
+        //年と月
         _yearMonth.setText(date.getDate()[0]+"/"+date.getDate()[1]);
+        //日
         _day.setText(date.getDate()[2]);
+        //曜日
         _dayOfWeek.setText("["+date.getDate()[3]+"]");
-        _rainChance.setText("降水確率 : " + jsonParser.getRainChance(object,Integer.parseInt(date.getDate()[4])) + "%");
-
-        _networkImageView.setImageUrl(_url, new ImageLoader(_queue, new ImageLoader.ImageCache() {
+        //降水確率
+        _rainChance.setText("降水確率 : " + jsonParser.getRainChance(jsonObject,Integer.parseInt(date.getDate()[4])) + "%");
+        //天気のアイコン
+        String imgUrl = currentWeatherData.get(3);
+        _networkImageView.setImageUrl(imgUrl, new ImageLoader(_queue, new ImageLoader.ImageCache() {
             @Override
             public Bitmap getBitmap(String url) {
                 return null;
             }
-
+            //アイコンの端の1ピクセルをとってその色を背景にセット
             @Override
             public void putBitmap(String url, Bitmap bitmap) {
-                //Bitmap bitmap = ((BitmapDrawable) _networkImageView.getDrawable()).getBitmap();
                 int pixecColor = bitmap.getPixel(0, 0);
                 _backGround.setBackgroundColor(pixecColor);
             }
         }));
 
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-        }
     }
 }

@@ -1,10 +1,6 @@
 package gr.jp.java_conf.kzstudio.amenavi.Util;
 
 
-import android.os.Environment;
-import android.util.Log;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,7 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.channels.DatagramChannel;
 
 /**
  * Created by kiyokazu on 2015/12/24.
@@ -24,10 +19,7 @@ public class JsonReader {
 
         InputStream input;
         JSONObject jsonObject = null;
-        JSONArray jObj=null;
         try {
-
-            //destinate a file to read
             input = new FileInputStream(outputDir + "/" + fileName+".json");
             int size = input.available();
             byte[] buffer = new byte[size];
@@ -35,14 +27,9 @@ public class JsonReader {
             input.close();
 
             String json = new String(buffer);
-            //convert string data to json data
-            //jObj= new JSONArray(json);
             jsonObject = new JSONObject(json);
-            Log.d("check reading file",json);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return jsonObject;

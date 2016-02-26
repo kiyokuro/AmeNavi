@@ -9,16 +9,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
 
-import org.json.JSONObject;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
+import gr.jp.java_conf.kzstudio.amenavi.Util.FileOutput;
 import gr.jp.java_conf.kzstudio.amenavi.Util.JsonWritter;
 
 /**
@@ -26,12 +18,12 @@ import gr.jp.java_conf.kzstudio.amenavi.Util.JsonWritter;
  */
 public class Data extends Volley{
     public static final String _URL = "http://api.worldweatheronline.com/free/v2/weather.ashx?";
-    public static final String _apiKey = "fb77e87981a12ca1875459b55b929";
+    public static final String _APIKEY = "fb77e87981a12ca1875459b55b929";
 
-    private Context context;
+    private Context _context;
 
     public Data(Context context){
-        this.context = context;
+        this._context = context;
     }
 
     /**
@@ -42,8 +34,6 @@ public class Data extends Volley{
      */
     public String getAccessUrl(double lat, double lon) {
         final String area= lat+"%2C"+lon;
-        final AQuery aq = new AQuery(context);
-        final Map<String, Object> params = new HashMap<String, Object>();
         StringBuilder requestURL = new StringBuilder();
         
         requestURL.append(_URL);
@@ -53,7 +43,7 @@ public class Data extends Volley{
         requestURL.append("&fx24=yes");
         requestURL.append("&includelocation=yes");
         requestURL.append("&lang=ja");
-        requestURL.append("&key="+ _apiKey);
+        requestURL.append("&key="+ _APIKEY);
         Log.v("requestURL",requestURL.toString());
 
         return requestURL.toString();

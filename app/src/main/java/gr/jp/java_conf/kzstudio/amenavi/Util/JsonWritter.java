@@ -1,17 +1,11 @@
 package gr.jp.java_conf.kzstudio.amenavi.Util;
 
-import android.os.Environment;
 import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 /**

@@ -1,7 +1,5 @@
 package gr.jp.java_conf.kzstudio.amenavi.Util;
 
-import android.net.Uri;
-
 /**
  * Created by kiyokazu on 16/01/25.
  */

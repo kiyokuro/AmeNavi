@@ -35,8 +35,8 @@ public class WatherActivity extends FragmentActivity {
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
-
-            fragments = Arrays.asList(new TodaysWeatherFragment(), new WeatherPagerFragment());
+            //縦に並べるフラグメントを指定する
+            fragments = Arrays.asList(new TodaysWeatherPagerFragment(), new WeatherPagerFragment());
         }
 
         @Override

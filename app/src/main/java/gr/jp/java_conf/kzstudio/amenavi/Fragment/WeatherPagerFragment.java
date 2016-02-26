@@ -36,7 +36,8 @@ public class WeatherPagerFragment extends Fragment {
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
-            fragments = Arrays.asList(new TodaysWeatherListFragment(), new TomorrowWeatherFragment());
+            //横に並べるフラグメントをしてい
+            fragments = Arrays.asList(new TodaysWeatherListFragment(), new TomorrowWeatherListFragment());
         }
 
         @Override
