@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "gr.jp.java_conf.kzstudio.amenavi"
+        applicationId "gr.jp.java_conf.kzstudio.kokoten"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
@@ -15,6 +15,17 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    applicationVariants.all { variant ->
+        if (variant.buildType.name.equals("release")) {
+            variant.outputs.each { output ->
+                if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
+                    def list = defaultConfig.applicationId.split("\\.")
+                    def appname = list[list.length - 1]
+                    output.outputFile = new File(output.outputFile.parent, "${appname}.apk")
+                }
+            }
         }
     }
 }
