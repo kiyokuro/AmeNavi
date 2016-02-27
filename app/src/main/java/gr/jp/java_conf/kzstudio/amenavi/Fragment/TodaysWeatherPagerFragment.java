@@ -15,7 +15,7 @@ import java.util.List;
 import gr.jp.java_conf.kzstudio.amenavi.R;
 
 /**
- * Created by kiyokazu on 16/02/03.
+ * MyPagerAdapter内で左右にスクロールするFragmentListに設定する。
  */
 public class TodaysWeatherPagerFragment extends Fragment {
     @Override
@@ -37,7 +37,7 @@ public class TodaysWeatherPagerFragment extends Fragment {
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
             //横向きに並べるフラグメントを指定する
-            fragments = Arrays.asList(new TodaysWeatherFragment(), new SettingFragment());
+            fragments = Arrays.asList(new CurrentWeatherFragment(), new ResearchFragment());
         }
 
         @Override

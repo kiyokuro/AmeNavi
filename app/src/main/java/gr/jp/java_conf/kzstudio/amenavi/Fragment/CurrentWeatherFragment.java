@@ -28,9 +28,9 @@ import gr.jp.java_conf.kzstudio.amenavi.Util.MyDate;
 
 
 /**
- * Created by kiyokazu on 16/01/09.
+ * 現在の天気の画面を提供する。
  */
-public class TodaysWeatherFragment extends Fragment{
+public class CurrentWeatherFragment extends Fragment{
     private TextView _currentWeather;
     private TextView _rainChance;
     private TextView _temperature;
@@ -65,6 +65,9 @@ public class TodaysWeatherFragment extends Fragment{
         return view;
     }
 
+    /**
+     * JSONデータから現在の天気情報を取得して、Viewにセットする。
+     */
     public void showCurrentWeather(){
         MyDate date = new MyDate();
         JsonReader jsonReader = new JsonReader();

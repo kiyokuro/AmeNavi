@@ -1,7 +1,7 @@
 package gr.jp.java_conf.kzstudio.amenavi.Util;
 
 /**
- * Created by kiyokazu on 16/01/25.
+ * 天気に関する情報を扱う。
  */
 public class FutureWeather {
     private String _imgUrl;

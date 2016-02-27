@@ -11,10 +11,16 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by kiyokazu on 2015/12/24.
- * 端末のファイルに保存されているJSONデータを読み込む
+ * 端末内のファイルを読み込む。
  */
 public class JsonReader {
+    /**
+     * 端末のファイルに保存されているJSONデータを取得する。
+     * @param fileName 端末のファイルの名前
+     * @param outputDir ファイルのパス
+     * @return 取得したJSONObject
+     * @throws FileNotFoundException
+     */
     public JSONObject getJson(String fileName, File outputDir) throws FileNotFoundException {
 
         InputStream input;

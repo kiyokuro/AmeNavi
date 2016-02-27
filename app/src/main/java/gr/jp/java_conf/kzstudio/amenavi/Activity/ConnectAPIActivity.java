@@ -20,7 +20,7 @@ import gr.jp.java_conf.kzstudio.amenavi.Util.FileOutput;
 import gr.jp.java_conf.kzstudio.amenavi.Util.JsonWritter;
 
 /**
- * Created by kiyokazu on 16/02/03.
+ * 緯度と軽度から天気を検索して取得する。
  */
 public class ConnectAPIActivity extends Activity {
     private Context _context;
@@ -34,43 +34,45 @@ public class ConnectAPIActivity extends Activity {
 
         Intent intent = getIntent();
         Data data = new Data(_context);
-        String requestCode = data.getAccessUrl(intent.getDoubleExtra("lat",35.681382),
-                intent.getDoubleExtra("lon",139.766084));
+        String requestCode = data.getAccessUrl(intent.getDoubleExtra("lat",999.0),
+                intent.getDoubleExtra("lon",999.0));
         connectApi(requestCode);
     }
 
+    /**
+     * APIからデータ取得して端末のファイルに書き出す。
+     * @param requestUrl APIにアクセスするURL
+     */
     private void connectApi(String requestUrl){
         RequestQueue _requestQueue = Volley.newRequestQueue(_context);
         JsonObjectRequest jsonObjReq =new JsonObjectRequest(
-                // HTTPメソッド名を設定する。GETかPOSTか等
-                Request.Method.GET
-                // リクエスト先のURLを設定する
-                , requestUrl
-                // リクエストパラメーターを設定する
-                ,null
-                // 通信成功時のリスナーを設定する
-                ,new Response.Listener() {
+                Request.Method.GET,
+                requestUrl,
+                null,
+                new Response.Listener() {
             @Override
             public void onResponse(Object response) {
-                //通信成功時の処理
-                //Log.v("★ getdata", response.toString());
+                //通信成功
                 JsonWritter jsonWritter = new JsonWritter();
                 jsonWritter.fileMaker(response.toString(), "WeatherData", FileOutput._outputDir);
 
                 changeActivity();
             }
         }
-                // 通信失敗時のリスナーを設定する
                 ,new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // 通信失敗時の処理
+                // 通信失敗
                 Log.e("VolleyError", error.toString());
             }
         }
         );
         _requestQueue.add(jsonObjReq);
     }
+
+    /**
+     * WeatherActivityに画面遷移する。
+     */
     private void changeActivity(){
         findViewById(R.id.loadview).setVisibility(View.GONE);
         Intent intent = new Intent(this,WatherActivity.class);

@@ -25,7 +25,7 @@ import gr.jp.java_conf.kzstudio.amenavi.Util.ListAdapter;
 import gr.jp.java_conf.kzstudio.amenavi.Util.MyDate;
 
 /**
- * Created by kiyokazu on 16/02/03.
+ * 明日の時間ごとの天気予報の画面を提供する。
  */
 public class TomorrowWeatherListFragment extends Fragment {
     private ListView _listVIew;
@@ -50,6 +50,9 @@ public class TomorrowWeatherListFragment extends Fragment {
         return view;
     }
 
+    /**
+     * JSONデータから明日の時間ごとの天気を取得してViewに表示する。
+     */
     @TargetApi(Build.VERSION_CODES.M)
     public void showTomorrowWeather(){
         JsonReader jsonReader = new JsonReader();
@@ -68,13 +71,11 @@ public class TomorrowWeatherListFragment extends Fragment {
                 _listVIew.setAdapter(adapter);
                 return;
             }
-
-
             for(int i=1;i<9;i++) {
                 tomorrowWeatherData = jsonParser.getTomorrowWeather(object, i);
                 //ここにlistViewを作る処理を書く
                 list.add(new FutureWeather(
-                        tomorrowWeatherData.get(7),
+                        tomorrowWeatherData.get(3),
                         tomorrowWeatherData.get(1),
                         tomorrowWeatherData.get(5),
                         tomorrowWeatherData.get(6),

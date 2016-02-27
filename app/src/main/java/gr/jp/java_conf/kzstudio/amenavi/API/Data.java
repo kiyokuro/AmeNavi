@@ -3,18 +3,10 @@ package gr.jp.java_conf.kzstudio.amenavi.API;
 import android.content.Context;
 import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import gr.jp.java_conf.kzstudio.amenavi.Util.FileOutput;
-import gr.jp.java_conf.kzstudio.amenavi.Util.JsonWritter;
-
 /**
- * Created by kiyokazu on 16/01/09.
+ * APIにアクセスする時に使うURLを扱う。
  */
 public class Data extends Volley{
     public static final String _URL = "http://api.worldweatheronline.com/free/v2/weather.ashx?";

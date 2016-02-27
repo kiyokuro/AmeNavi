@@ -14,13 +14,13 @@ import gr.jp.java_conf.kzstudio.amenavi.Activity.MainActivity;
 import gr.jp.java_conf.kzstudio.amenavi.R;
 
 /**
- * Created by kiyokazu on 16/02/03.
+ * Research画面を提供する
  */
-public class SettingFragment extends Fragment{
-    private Button reload;
-    private Button search;
-    private EditText lat;
-    private EditText lon;
+public class ResearchFragment extends Fragment{
+    private Button _reload;
+    private Button _search;
+    private EditText _lat;
+    private EditText _lon;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -28,9 +28,9 @@ public class SettingFragment extends Fragment{
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.setting_fragment_layout, null);//layoutを返す
-        reload = (Button)view.findViewById(R.id.reload);
-        reload.setOnClickListener(new View.OnClickListener(){
+        View view = inflater.inflate(R.layout.research_fragment_layout, null);//layoutを返す
+        _reload = (Button)view.findViewById(R.id.reload);
+        _reload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -38,19 +38,29 @@ public class SettingFragment extends Fragment{
                 getActivity().finish();
             }
         });
-        search = (Button)view.findViewById(R.id.search);
-        search.setOnClickListener(new View.OnClickListener() {
+
+        _search = (Button)view.findViewById(R.id.search);
+        _search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ConnectAPIActivity.class);
-                intent.putExtra("lat",Double.parseDouble(lat.getText().toString()));
-                intent.putExtra("lon",Double.parseDouble(lon.getText().toString()));
+                //入力データが空なら999をセットする。999で検索をかければNoDataになる
+                if (_lat.getText().toString().equals("")) {
+                    intent.putExtra("lat", 999.0);
+                } else {
+                    intent.putExtra("lat", Double.parseDouble(_lat.getText().toString()));
+                }
+                if (_lon.getText().toString().equals("")) {
+                    intent.putExtra("lon", 999.0);
+                } else {
+                    intent.putExtra("lon", Double.parseDouble(_lon.getText().toString()));
+                }
                 startActivity(intent);
                 getActivity().finish();
             }
         });
-        lat = (EditText)view.findViewById(R.id.lat);
-        lon = (EditText)view.findViewById(R.id.lon);
+        _lat = (EditText)view.findViewById(R.id.lat);
+        _lon = (EditText)view.findViewById(R.id.lon);
 
         return view;
     }

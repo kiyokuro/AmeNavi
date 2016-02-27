@@ -3,7 +3,6 @@ package gr.jp.java_conf.kzstudio.amenavi.Util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,7 @@ import java.util.List;
 import gr.jp.java_conf.kzstudio.amenavi.R;
 
 /**
- * Created by kiyokazu on 16/01/25.
+ * ListViewのアイテムを作成するAdapter
  */
 public class ListAdapter extends ArrayAdapter<FutureWeather>{
     private List<FutureWeather> _item;
@@ -28,8 +27,6 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
     private LayoutInflater _inflater;
     private Context _context;
     RequestQueue queue;
-    private ImageLoader imageLoader;
-    private LruCache<String, Bitmap> mCache;
 
     public ListAdapter(Context context, int resourceId, List<FutureWeather> item) {
         super(context, resourceId, item);
@@ -38,7 +35,6 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
         this._resourceId = resourceId;
         this._inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         queue = Volley.newRequestQueue(getContext());
-        imageLoader = new ImageLoader(queue, new BitmapCache());
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -77,17 +73,10 @@ public class ListAdapter extends ArrayAdapter<FutureWeather>{
 
             @Override
             public void putBitmap(String url, Bitmap bitmap) {
-                //Bitmap bitmap = ((BitmapDrawable) _networkImageView.getDrawable()).getBitmap();
                 int pixecColor = bitmap.getPixel(0, 0);
                 listBackground.setBackgroundColor(pixecColor);
             }
         }));
-
-        // 画像取得処理
-        //ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
-        //imageLoader.get(url, listener);
-
-
 
         //時間をセット
         switch (item.get_time()){
