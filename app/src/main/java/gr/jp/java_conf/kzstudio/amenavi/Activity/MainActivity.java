@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -45,6 +46,8 @@ public class MainActivity extends FragmentActivity {
     private double _lat = 0.00;
     private double _lon = 0.00;
 
+    private TextView loadingMsg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,7 @@ public class MainActivity extends FragmentActivity {
         _context = this;
         FileOutput._outputDir = getDir("KokoTen", MODE_PRIVATE);
         findViewById(R.id.loadview).setVisibility(View.VISIBLE);
+        loadingMsg = (TextView)findViewById(R.id.loading_msg);
 
         if (Build.VERSION.SDK_INT >= 23) {
             checkPermission();
@@ -208,7 +212,13 @@ public class MainActivity extends FragmentActivity {
                                         _locationManager.requestLocationUpdates(_provider, 100, 1, _locationListener);
                                     }
                                 })
-                                .setNegativeButton("キャンセル", null)
+                                .setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        findViewById(R.id.loadview).setVisibility(View.GONE);
+                                        loadingMsg.setText("天気を取得できませんでした。");
+                                    }
+                                })
                                 .show();
                 }
             }

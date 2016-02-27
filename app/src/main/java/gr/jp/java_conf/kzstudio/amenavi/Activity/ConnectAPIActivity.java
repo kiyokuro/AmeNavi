@@ -1,11 +1,18 @@
 package gr.jp.java_conf.kzstudio.amenavi.Activity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,6 +31,9 @@ import gr.jp.java_conf.kzstudio.amenavi.Util.JsonWritter;
  */
 public class ConnectAPIActivity extends Activity {
     private Context _context;
+    private String _RequestCode;
+
+    private TextView loadingMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +41,13 @@ public class ConnectAPIActivity extends Activity {
         setContentView(R.layout.connect_api_activity_layout);
         _context = this;
         findViewById(R.id.loadview).setVisibility(View.VISIBLE);
+        loadingMsg = (TextView)findViewById(R.id.loading_msg);
 
         Intent intent = getIntent();
         Data data = new Data(_context);
-        String requestCode = data.getAccessUrl(intent.getDoubleExtra("lat",999.0),
+        _RequestCode = data.getAccessUrl(intent.getDoubleExtra("lat",999.0),
                 intent.getDoubleExtra("lon",999.0));
-        connectApi(requestCode);
+        connectApi(_RequestCode);
     }
 
     /**
@@ -64,6 +75,24 @@ public class ConnectAPIActivity extends Activity {
             public void onErrorResponse(VolleyError error) {
                 // 通信失敗
                 Log.e("VolleyError", error.toString());
+                new AlertDialog.Builder(_context)
+                        .setTitle("情報が取得できませんでした")
+                        .setMessage("情報を再取得しますか？")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @TargetApi(Build.VERSION_CODES.M)
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                connectApi(_RequestCode);
+                            }
+                        })
+                        .setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                findViewById(R.id.loadview).setVisibility(View.GONE);
+                                loadingMsg.setText("天気を取得できませんでした。");
+                            }
+                        })
+                        .show();
             }
         }
         );
