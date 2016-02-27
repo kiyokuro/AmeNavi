@@ -66,7 +66,7 @@ public class MyDate {
             default:
                 dayInfo[3]="?";break;
         }
-        dayInfo[4] = String.valueOf(calendar.get(calendar.HOUR));
+        dayInfo[4] = String.valueOf(calendar.get(calendar.HOUR_OF_DAY));
         return dayInfo;
     }
 }
