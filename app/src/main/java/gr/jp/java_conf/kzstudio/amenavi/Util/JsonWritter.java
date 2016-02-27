@@ -24,7 +24,7 @@ public class JsonWritter {
             PrintWriter pw = new PrintWriter(bw);
             pw.write(jsonData);
             pw.close();
-            Log.v("write data","write date");
+            //Log.v("write data","write date");
         } catch (IOException e) {
             e.printStackTrace();
          }

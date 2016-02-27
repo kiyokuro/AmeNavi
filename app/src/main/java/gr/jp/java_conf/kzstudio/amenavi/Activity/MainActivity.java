@@ -2,7 +2,9 @@ package gr.jp.java_conf.kzstudio.amenavi.Activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -11,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -102,9 +105,25 @@ public class MainActivity extends FragmentActivity {
         //低消費電力
         criteria.setPowerRequirement(Criteria.POWER_LOW);
         _provider = _locationManager.getBestProvider(criteria, true);
-        //GPSが使えるかチェック
-        boolean gpsFlg = _locationManager.isProviderEnabled(_provider);
-        Log.d("GPS Enabled", gpsFlg ? "OK" : "NG");
+        //GPSがONかチェック
+        String gpsStatus = android.provider.Settings.Secure.getString(getContentResolver(),
+                Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+        //GPSがOFFならダイアログを表示
+        if(gpsStatus.indexOf("gps", 0) < 0){
+            new AlertDialog.Builder(this)
+                    .setTitle("位置情報がONになっていません")
+                    .setMessage("位置情報がONに設定されていません。位置情報をONにしてください。")
+                    .setPositiveButton("GPS設定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //GPSの設定画面を開く
+                            Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("閉じる", null)
+                    .show();
+        }
 
         //リスナーの設定
         _locationListener = new LocationListener() {
