@@ -25,9 +25,9 @@ import gr.jp.java_conf.kzstudio.amenavi.Util.ListAdapter;
 import gr.jp.java_conf.kzstudio.amenavi.Util.MyDate;
 
 /**
- * Created by kiyokazu on 16/02/03.
+ * 明日の時間ごとの天気予報の画面を提供する。
  */
-public class TomorrowWeatherFragment extends Fragment {
+public class TomorrowWeatherListFragment extends Fragment {
     private ListView _listVIew;
     private TextView _dayLabel;
 
@@ -40,7 +40,7 @@ public class TomorrowWeatherFragment extends Fragment {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.tomorrow_weather_list_layout, null);//layoutを返す
+        View view = inflater.inflate(R.layout.tomorrow_weather_list_fragment_layout, null);//layoutを返す
         _listVIew = (ListView)view.findViewById(R.id.tomorrow_list);
         _dayLabel = (TextView)view.findViewById(R.id.day_label);
 
@@ -50,18 +50,24 @@ public class TomorrowWeatherFragment extends Fragment {
         return view;
     }
 
+    /**
+     * JSONデータから明日の時間ごとの天気を取得してViewに表示する。
+     */
     @TargetApi(Build.VERSION_CODES.M)
     public void showTomorrowWeather(){
         JsonReader jsonReader = new JsonReader();
         JsonParser jsonParser = new JsonParser();
         tomorrowWeatherData = new ArrayList<String>();
         ListAdapter adapter;
+
         try {
             JSONObject object = jsonReader.getJson("WeatherData", FileOutput._outputDir);
             tomorrowWeatherData = jsonParser.getTomorrowWeather(object, 0);
+
+            //時間ごとの天気予報データがなかったら”No Data”と書かれたアイテムを1つ表示する
             if(tomorrowWeatherData.size()==0){
                 list.add(new FutureWeather("","No Data","","","","",""));
-                adapter = new ListAdapter(getActivity().getApplicationContext(), R.layout.future_weather_list, list);
+                adapter = new ListAdapter(getActivity().getApplicationContext(), R.layout.weather_list_item, list);
                 _listVIew.setAdapter(adapter);
                 return;
             }
@@ -69,7 +75,7 @@ public class TomorrowWeatherFragment extends Fragment {
                 tomorrowWeatherData = jsonParser.getTomorrowWeather(object, i);
                 //ここにlistViewを作る処理を書く
                 list.add(new FutureWeather(
-                        tomorrowWeatherData.get(7),
+                        tomorrowWeatherData.get(3),
                         tomorrowWeatherData.get(1),
                         tomorrowWeatherData.get(5),
                         tomorrowWeatherData.get(6),
@@ -77,9 +83,10 @@ public class TomorrowWeatherFragment extends Fragment {
                         tomorrowWeatherData.get(0),
                         tomorrowWeatherData.get(4)));
             }
-            adapter = new ListAdapter(getActivity().getApplicationContext(), R.layout.future_weather_list, list);
+            adapter = new ListAdapter(getActivity().getApplicationContext(), R.layout.weather_list_item, list);
             _listVIew.setAdapter(adapter);
 
+            //日付を表示
             MyDate myDate = new MyDate();
             _dayLabel.setText(myDate.getTomorrowDate()[1]+"/"+myDate.getTomorrowDate()[2]+"["+myDate.getTomorrowDate()[3]+"]");
         }catch (JSONException | IOException e){

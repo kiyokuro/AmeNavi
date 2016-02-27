@@ -2,7 +2,9 @@ package gr.jp.java_conf.kzstudio.amenavi.Activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -11,10 +13,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -24,185 +28,208 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.io.File;
-
 import gr.jp.java_conf.kzstudio.amenavi.API.Data;
 import gr.jp.java_conf.kzstudio.amenavi.R;
 import gr.jp.java_conf.kzstudio.amenavi.Util.FileOutput;
 import gr.jp.java_conf.kzstudio.amenavi.Util.JsonWritter;
 
+/**
+ * 位置情報の取得とAPIにアクセスを行う
+ */
 public class MainActivity extends FragmentActivity {
     private final int _REQUEST_PERMISSION_GPS = 10;
     private Context _context;
 
     private LocationManager _locationManager;
+    private LocationListener _locationListener;
     private String _provider;
     private double _lat = 0.00;
     private double _lon = 0.00;
+
+    private TextView loadingMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        _context = this;
-        File outputDir = getDir("KokoTen", MODE_PRIVATE);
-        FileOutput._outputDir = outputDir;
-        findViewById(R.id.loadview).setVisibility(View.VISIBLE);
 
-        if(Build.VERSION.SDK_INT>=23){
+        _context = this;
+        FileOutput._outputDir = getDir("KokoTen", MODE_PRIVATE);
+        findViewById(R.id.loadview).setVisibility(View.VISIBLE);
+        loadingMsg = (TextView)findViewById(R.id.loading_msg);
+
+        if (Build.VERSION.SDK_INT >= 23) {
             checkPermission();
-        }else {
+        } else {
             getLocation();
         }
     }
 
+    /**
+     * 位置情報の権限が許可されているか確認する。許可されてなければ許可を求める。
+     */
     @TargetApi(Build.VERSION_CODES.M)
     private void checkPermission() {
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, _REQUEST_PERMISSION_GPS);
 
-            }else {
-                Toast toast = Toast.makeText(this, "現在地の天気を検索するために、GPSの使用を許可してください", Toast.LENGTH_LONG);
+            } else {
+                Toast toast = Toast.makeText(this,
+                        "現在地の天気を検索するために、GPSの使用を許可してください", Toast.LENGTH_LONG);
                 toast.show();
 
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, _REQUEST_PERMISSION_GPS);
             }
-
         } else {
             getLocation();
         }
     }
 
-    // 結果の受け取り
+    /**
+     * checkPermissionで権限を求めた結果を受け取る。
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == _REQUEST_PERMISSION_GPS) {
-            // 使用が許可された
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLocation();
-                return;
-
             } else {
-                // それでも拒否された時の対応
                 Toast toast = Toast.makeText(this, "アプリは実行できません", Toast.LENGTH_SHORT);
                 toast.show();
             }
         }
     }
 
+    /**
+     * GPSから位置情報を取得を開始する。位置情報の取得を終了するまで位置情報を取得し続ける。
+     * 位置情報がONになっていなければダイアログを表示してONにするように促す。
+     */
     @TargetApi(Build.VERSION_CODES.M)
     private void getLocation() {
-        //GPSの準備と接続確認
         _locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        // Criteriaオブジェクトを生成
         Criteria criteria = new Criteria();
-        // Accuracyを指定(低精度)
         criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        // PowerRequirementを指定(低消費電力)
         criteria.setPowerRequirement(Criteria.POWER_LOW);
-        // ロケーションプロバイダの取得
         _provider = _locationManager.getBestProvider(criteria, true);
-        //GPSが使えるかチェック
-        boolean gpsFlg = _locationManager.isProviderEnabled(_provider);
-        Log.d("GPS Enabled", gpsFlg ? "OK" : "NG");
+        //GPSがONかチェック
+        String gpsStatus = android.provider.Settings.Secure.getString(getContentResolver(),
+                Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+        //GPSがOFFならダイアログを表示
+        if (gpsStatus.indexOf("gps", 0) < 0) {
+            new AlertDialog.Builder(this)
+                    .setTitle("位置情報がONになっていません")
+                    .setMessage("位置情報がONに設定されていません。位置情報をONにしてください。")
+                    .setPositiveButton("GPS設定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //GPSの設定画面を開く
+                            Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("閉じる", null)
+                    .show();
+        }
+
+        //リスナーの設定
+        _locationListener = new LocationListener() {
+            @TargetApi(Build.VERSION_CODES.M)
+            @Override
+            public void onLocationChanged(Location location) {
+                _lat = location.getLatitude();
+                _lon = location.getLongitude();
+                //Log.v("現在地", "Lat=" + _lat + "Lon=" + _lon);
+
+                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                //APIにアクセスして位置情報の取得を終了する。
+                Data data = new Data(_context);
+                String requestUrl = data.getAccessUrl(_lat, _lon);
+                connectApi(requestUrl);
+                _locationManager.removeUpdates(_locationListener);
+            }
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+        };
 
         //現在地取得開始
-        _locationManager.requestLocationUpdates(
-                _provider, //LocationManager.NETWORK_PROVIDER,
-                5000, // 通知のための最小時間間隔（ミリ秒）
-                10, // 通知のための最小距離間隔（メートル）
-                new LocationListener() {
-                    @TargetApi(Build.VERSION_CODES.M)
-                    @Override
-                    public void onLocationChanged(Location location) {
-                        _lat = location.getLatitude();
-                        _lon = location.getLongitude();
-                        String msg = "Lat=" + _lat + "\nLng=" + _lon;
-                        Log.v("現在地", msg);
-
-                        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            return;
-                        }
-                        //位置情報の取得終了
-                        _locationManager.removeUpdates(this);
-
-                        //changeActivity();
-
-                        //天気のデータを取得
-                        Data data = new Data(_context);
-                        String requestUrl = data.getAccessUrl(_lat, _lon);
-
-                        connectApi(requestUrl);
-                    }
-
-                    @Override
-                    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                    }
-
-                    @Override
-                    public void onProviderEnabled(String provider) {
-
-                    }
-
-                    @Override
-                    public void onProviderDisabled(String provider) {
-
-                    }
-                });
+        _locationManager.requestLocationUpdates(_provider, 100, 1, _locationListener);
     }
 
     /**
-     * APIからデータ取得して端末のファイルに書き出す
+     * APIからデータ取得して端末のファイルに書き出す。
      * @param requestUrl APIにアクセスするURL
      */
-    private void connectApi(String requestUrl){
+    public void connectApi(String requestUrl) {
         RequestQueue _requestQueue = Volley.newRequestQueue(_context);
-        JsonObjectRequest jsonObjReq =new JsonObjectRequest(
-                // HTTPメソッド名を設定する。GETかPOSTか等
-                Request.Method.GET
-                // リクエスト先のURLを設定する
-                , requestUrl
-                // リクエストパラメーターを設定する
-                ,null
-                // 通信成功時のリスナーを設定する
-                ,new Response.Listener() {
-            @Override
-            public void onResponse(Object response) {
-                //通信成功時の処理
-                //Log.v("★ getdata", response.toString());
-                JsonWritter jsonWritter = new JsonWritter();
-                jsonWritter.fileMaker(response.toString(), "WeatherData", FileOutput._outputDir);
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.GET,
+                requestUrl,
+                null,
+                new Response.Listener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        //通信成功
 
-                /*FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                Fragment todayWeatherFm = new TodaysWeatherFragment();
-                //Bundle bundle = new Bundle();
-                //bundle.putString("outputDir", outputDir.toString());
-                //todayWeatherFm.setArguments(bundle);
-                ft.replace(R.id.container, todayWeatherFm);
-                ft.commit();*/
+                        JsonWritter jsonWritter = new JsonWritter();
+                        jsonWritter.fileMaker(response.toString(), "WeatherData", FileOutput._outputDir);
 
-                changeActivity();
+                        changeActivity();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // 通信失敗
+                        Log.e("VolleyError", error.toString());
+                        new AlertDialog.Builder(_context)
+                                .setTitle("情報が取得できませんでした")
+                                .setMessage("情報を再取得しますか？")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @TargetApi(Build.VERSION_CODES.M)
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                                                != PackageManager.PERMISSION_GRANTED) {
+                                            return;
+                                        }
+                                        _locationManager.requestLocationUpdates(_provider, 100, 1, _locationListener);
+                                    }
+                                })
+                                .setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        findViewById(R.id.loadview).setVisibility(View.GONE);
+                                        loadingMsg.setText("天気を取得できませんでした。");
+                                    }
+                                })
+                                .show();
+                }
             }
-        }
-                // 通信失敗時のリスナーを設定する
-                ,new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // 通信失敗時の処理
-                Log.e("VolleyError",error.toString());
-            }
-        }
         );
         _requestQueue.add(jsonObjReq);
+        _requestQueue.start();
     }
 
+    /**
+     * WeatherActivityに画面遷移する。
+     */
     private void changeActivity(){
         findViewById(R.id.loadview).setVisibility(View.GONE);
         Intent intent = new Intent(this,WatherActivity.class);

@@ -10,15 +10,12 @@ import android.support.v4.view.DirectionalViewPager;
 import java.util.Arrays;
 import java.util.List;
 
-import gr.jp.java_conf.kzstudio.amenavi.Fragment.SettingFragment;
-import gr.jp.java_conf.kzstudio.amenavi.Fragment.TodaysWeatherFragment;
-import gr.jp.java_conf.kzstudio.amenavi.Fragment.TodaysWeatherListFragment;
 import gr.jp.java_conf.kzstudio.amenavi.Fragment.TodaysWeatherPagerFragment;
 import gr.jp.java_conf.kzstudio.amenavi.Fragment.WeatherPagerFragment;
 import gr.jp.java_conf.kzstudio.amenavi.R;
 
 /**
- * Created by kiyokazu on 16/01/27.
+ * MyPagerAdapter内で上下にスクロールするFragmentListに設定する。
  */
 public class WatherActivity extends FragmentActivity {
     @Override
@@ -35,8 +32,8 @@ public class WatherActivity extends FragmentActivity {
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
-
-            fragments = Arrays.asList(new TodaysWeatherFragment(), new WeatherPagerFragment());
+            //縦に並べるフラグメントを指定する
+            fragments = Arrays.asList(new TodaysWeatherPagerFragment(), new WeatherPagerFragment());
         }
 
         @Override
